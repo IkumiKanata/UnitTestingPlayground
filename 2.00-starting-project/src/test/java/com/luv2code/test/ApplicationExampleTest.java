@@ -45,8 +45,8 @@ class ApplicationExampleTest {
     @BeforeEach
     public void setUp() {
         count = 1;
-        System.out.println("Testing:" + appName + " which is " + appDescription + " Version:" + appVersion
-                + ".Execution of test method " + count);
+//        System.out.println("Testing:" + appName + " which is " + appDescription + " Version:" + appVersion
+//                + ".Execution of test method " + count);
 
         collegeStudent.setFirstname("John");
         collegeStudent.setLastname("Doe");
@@ -86,4 +86,22 @@ class ApplicationExampleTest {
         assertNull(student.getStudentGrades());
     }
 
+    @Test
+    @DisplayName("veryfy students are prototypes")
+    void verifyStudentsArePrototypes() {
+        var student1 = context.getBean("collegeStudent", CollegeStudent.class);
+        var student2 = context.getBean("collegeStudent", CollegeStudent.class);
+        assertNotEquals(student1, student2, student1.toString() + " should not be equal to " + student2.toString());
+        System.out.println("Student1:" + student1.hashCode());
+        System.out.println("Student2:" + student2.hashCode());
+    }
+
+    @Test
+    @DisplayName("find grade point average")
+    void findGradePointAverage() {
+        assertAll("grades",
+                () -> assertEquals(240.0, studentGrades.addGradeResultsForSingleClass(collegeStudent.getStudentGrades().getMathGradeResults())),
+                () -> assertEquals(80.0, studentGrades.findGradePointAverage(collegeStudent.getStudentGrades().getMathGradeResults()))
+        );
+    }
 }
