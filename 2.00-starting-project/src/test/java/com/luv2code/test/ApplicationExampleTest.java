@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +39,14 @@ class ApplicationExampleTest {
     @Autowired
     StudentGrades studentGrades;
 
+    @Autowired
+    ApplicationContext context;
+
     @BeforeEach
     public void setUp() {
         count = 1;
         System.out.println("Testing:" + appName + " which is " + appDescription + " Version:" + appVersion
-        + ".Execution of test method " + count);
+                + ".Execution of test method " + count);
 
         collegeStudent.setFirstname("John");
         collegeStudent.setLastname("Doe");
@@ -64,9 +68,22 @@ class ApplicationExampleTest {
     }
 
     @Test
-    @DisplayName("sGradeGreater false")
+    @DisplayName("GradeGreater false")
     void isGradeGraterFalse() {
-        assertFalse( studentGrades.isGradeGreater(90.0, 80.0),"failure - should be false");
+        assertFalse(studentGrades.isGradeGreater(90.0, 100000), "failure - should be false");
+    }
+
+    @Test
+    @DisplayName("create student without grades")
+    void createStudentWithoutGrades() {
+        var student = context.getBean("collegeStudent", CollegeStudent.class);
+        student.setFirstname("John");
+        student.setLastname("Doe");
+        student.setEmailAddress("test.com");
+        assertNotNull(student.getFirstname());
+        assertNotNull(student.getLastname());
+        assertNotNull(student.getEmailAddress());
+        assertNull(student.getStudentGrades());
     }
 
 }
