@@ -12,11 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = MvcTestingExampleApplication.class)
@@ -24,17 +25,24 @@ public class MockAnnotationTest {
 
     @Autowired
     ApplicationContext context;
-
+    //
     @Autowired
     CollegeStudent collegeStudent;
-
+    //
     @Autowired
     StudentGrades studentGrades;
+//
+//    @Mock
+//    private ApplicationDao applicationDao;
+//
+//    @InjectMocks
+//    private ApplicationService applicationService;
 
-    @Mock
+
+    @MockBean
     private ApplicationDao applicationDao;
 
-    @InjectMocks
+    @Autowired
     private ApplicationService applicationService;
 
     @BeforeEach
@@ -59,6 +67,42 @@ public class MockAnnotationTest {
         );
     }
 
+    @Test
+    @DisplayName("find gpa")
+    void assertEqualsTestFindGpa() {
+        when(applicationDao.findGradePointAverage(studentGrades.getMathGradeResults())).thenReturn(90.00);
+        assertEquals(90.00, applicationService.findGradePointAverage(studentGrades.getMathGradeResults()));
+    }
+
+    @Test
+    @DisplayName("not null")
+    void assertNotNullTest() {
+        when(applicationDao.checkNull(studentGrades.getMathGradeResults())).thenReturn(true);
+        assertNotNull(applicationService.checkNull(studentGrades.getMathGradeResults()));
+    }
+
+    @Test
+    @DisplayName("throw runtime exception")
+    void assertThrowsTest() {
+        CollegeStudent nullStudent = (CollegeStudent) context.getBean("collegeStudent");
+        when(applicationDao.checkNull(nullStudent)).thenThrow(new RuntimeException());
+        assertThrows(RuntimeException.class, () -> applicationService.checkNull(nullStudent));
+    }
+
+    @Test
+    @DisplayName("multiple stubbing")
+    void multipleStubbingTest() {
+        CollegeStudent nullStudent = (CollegeStudent) context.getBean("collegeStudent");
+        when(applicationDao.checkNull(nullStudent))
+                .thenThrow(new RuntimeException())
+                .thenReturn("Do not throw exception second time");
+
+        assertThrows(RuntimeException.class, () -> applicationService.checkNull(nullStudent));
+        assertEquals("Do not throw exception second time", applicationService.checkNull(nullStudent));
+        verify(applicationDao, times(2)).checkNull(nullStudent);
+
+
+    }
 }
 
 //`@Mock` と `@InjectMocks` は、モックオブジェクトを作成し、依存性を注入するために Mockito テストフレームワークで使用されるアノテーションですが、彼らの役割は異なります。
