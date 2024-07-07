@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class GradebookController {
 
-	@Autowired
 	private Gradebook gradebook;
+
+	public GradebookController(Gradebook gradebook) {
+		this.gradebook = gradebook;
+	}
 
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
