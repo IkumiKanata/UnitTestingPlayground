@@ -20,4 +20,8 @@ public class StudentAndGradeService {
         student.setId(0);
         studentDao.save(student);
     }
+
+    public boolean isStudentNullCheck(int id) {
+        return studentDao.findById(id).isPresent();
+    }
 }
