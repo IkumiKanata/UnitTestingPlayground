@@ -24,4 +24,8 @@ public class StudentAndGradeService {
     public boolean isStudentNullCheck(int id) {
         return studentDao.findById(id).isPresent();
     }
+
+    public void deleteStudent(int id) {
+        studentDao.deleteById(id);
+    }
 }
