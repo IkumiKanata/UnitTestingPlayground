@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +34,6 @@ public class StudentAndGradeServiceTest {
     @BeforeEach
     public void setUp() {
         jdbcTemplate.execute("insert into student (id, firstname, lastname, email_address) values (1, 'Taco', 'Bell', 'test.com')");
-
     }
 
 
@@ -59,6 +61,20 @@ public class StudentAndGradeServiceTest {
 
         student = studentDao.findById(1);
         assertFalse(student.isPresent());
+    }
+
+    @Test
+    @Sql({"/insertData.sql"})
+    public void getGradeBookService() {
+        Iterable<CollegeStudent> students = studentAndGradeService.getGradeBook();
+
+
+        List<CollegeStudent> studentList = new ArrayList<>();
+
+        for (CollegeStudent student : students) {
+            studentList.add(student);
+        }
+        assertEquals(6, studentList.size());
     }
 
     @AfterEach

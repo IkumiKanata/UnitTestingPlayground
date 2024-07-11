@@ -15,8 +15,8 @@ public class StudentAndGradeService {
         this.studentDao = studentDao;
     }
 
-    public void createStudent(String firstName, String lastName, String emailAddress) {
-        CollegeStudent student = new CollegeStudent(firstName, lastName, emailAddress);
+    public void createStudent(String firstname, String lastname, String emailAddress) {
+        CollegeStudent student = new CollegeStudent(firstname, lastname, emailAddress);
         student.setId(0);
         studentDao.save(student);
     }
@@ -27,5 +27,9 @@ public class StudentAndGradeService {
 
     public void deleteStudent(int id) {
         studentDao.deleteById(id);
+    }
+
+    public Iterable<CollegeStudent> getGradeBook() {
+        return studentDao.findAll();
     }
 }
