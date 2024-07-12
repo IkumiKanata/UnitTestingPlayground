@@ -50,7 +50,6 @@ public class GradeBookControllerTest {
 
 
 
-
     //    @BeforeAll`アノテーションを使用するメソッドは、テストクラスの全テストメソッドの実行前に一度だけ実行されるセットアップメソッドです。このメソッドが `static`である必要があるのは、
 //    JUnit Jupiter（JUnit 5）において、`
 //    @BeforeAll`アノテーションが付与されたメソッドはクラスレベルで実行されるためです。つまり、テストクラスのインスタンスが生成される前に実行されるため、このメソッドにアクセスするためにはメソッドがクラスメソッド（`static`メソッド）である必要があります。
@@ -101,6 +100,14 @@ public class GradeBookControllerTest {
 
     @Test
     public void createStudentHttpRequest() throws Exception {
+
+        CollegeStudent student = new CollegeStudent("John", "Doe", "test2.com");
+
+        List<CollegeStudent> collegeStudents = List.of(student);
+
+        when(studentAndGradeService.getGradeBook()).thenReturn(collegeStudents);
+
+        assertIterableEquals(collegeStudents, studentAndGradeService.getGradeBook());
 
 
         MvcResult mvcResult = this.mockMvc.perform(post("/")
