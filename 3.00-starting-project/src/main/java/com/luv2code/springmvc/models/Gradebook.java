@@ -24,4 +24,8 @@ public class Gradebook {
     public void setStudents(List<GradebookCollegeStudent> students) {
         this.students = students;
     }
+
+    public void addStudent(GradebookCollegeStudent student) {
+        students.add(student);
+    }
 }
