@@ -3,7 +3,9 @@ package com.luv2code.springmvc.service;
 
 import com.luv2code.springmvc.models.CollegeStudent;
 import com.luv2code.springmvc.models.MathGrade;
+import com.luv2code.springmvc.models.ScienceGrade;
 import com.luv2code.springmvc.repository.MathGradesDao;
+import com.luv2code.springmvc.repository.ScienceGradesDao;
 import com.luv2code.springmvc.repository.StudentDao;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -17,14 +19,21 @@ public class StudentAndGradeService {
 
     private final MathGradesDao mathGradesDao;
 
+    private final ScienceGradesDao scienceGradesDao;
+
     @Qualifier("mathGrades")
     private final MathGrade mathGrade;
 
+    @Qualifier("scienceGrades")
+    private final ScienceGrade scienceGrade;
 
-    StudentAndGradeService(StudentDao studentDao, MathGradesDao mathGradesDao, MathGrade mathGrade) {
+
+    StudentAndGradeService(StudentDao studentDao, MathGradesDao mathGradesDao, ScienceGradesDao scienceGradesDao, MathGrade mathGrade, ScienceGrade scienceGrade) {
         this.studentDao = studentDao;
         this.mathGradesDao = mathGradesDao;
+        this.scienceGradesDao = scienceGradesDao;
         this.mathGrade = mathGrade;
+        this.scienceGrade = scienceGrade;
     }
 
     public void createStudent(String firstname, String lastname, String emailAddress) {
@@ -45,17 +54,25 @@ public class StudentAndGradeService {
         return studentDao.findAll();
     }
 
-    public boolean createMathGrade( double grade, int studentId, String gradeType) {
-        if(!isStudentNullCheck(studentId)) {
+    public boolean createGrade(double grade, int studentId, String gradeType) {
+        if (!isStudentNullCheck(studentId)) {
             return false;
         }
 
-        if(grade >= 0 && grade <= 100) {
-            if(gradeType.equals("math")) {
+        if (grade >= 0 && grade <= 100) {
+            if (gradeType.equals("math")) {
                 mathGrade.setId(0);
                 mathGrade.setGrade(grade);
                 mathGrade.setStudentId(studentId);
                 mathGradesDao.save(mathGrade);
+                return true;
+            }
+
+            if (gradeType.equals("science")) {
+                scienceGrade.setId(0);
+                scienceGrade.setGrade(grade);
+                scienceGrade.setStudentId(studentId);
+                scienceGradesDao.save(scienceGrade);
                 return true;
             }
         }
