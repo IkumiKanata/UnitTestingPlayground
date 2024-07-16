@@ -1,4 +1,4 @@
-package com.luv2code.springmvc.service;
+package com.luv2code.springmvc.repository;
 
 
 import com.luv2code.springmvc.models.CollegeStudent;

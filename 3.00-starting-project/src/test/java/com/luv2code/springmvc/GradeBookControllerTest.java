@@ -3,7 +3,7 @@ package com.luv2code.springmvc;
 
 import com.luv2code.springmvc.models.CollegeStudent;
 import com.luv2code.springmvc.service.StudentAndGradeService;
-import com.luv2code.springmvc.service.StudentDao;
+import com.luv2code.springmvc.repository.StudentDao;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
